@@ -1,0 +1,28 @@
+<%- include("./partials/header.ejs")%>
+<link rel="stylesheet" href="/stylesheets/index.css" />
+</head>
+<body>
+<div class="container">
+        
+  <form id="form">
+      <div class="title">Join payment tool chat</div>
+      <div>
+          <label for="username">User Name</label>
+
+          <i class="fas fa-user"></i>
+          <input type="text" name="username" id="username"placeholder="Enter username"/>
+          <div class="error"></div>
+      </div> 
+      <div>
+          <label for="password">Password</label>
+          <i class="fas fa-lock"></i>
+          <input type="password" name="password" id="password"placeholder="Enter password"/>
+          <div class="error"></div>
+       </div>
+      
+       <button type="submit" id="submit">join</button>
+
+       <div class="or">Or</div>
+
+       <button type="submit" id="submit">join with facebook</button>
+<%- include("./partials/footer.ejs", { jsFile: 'index' })%>

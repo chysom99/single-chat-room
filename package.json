@@ -1,10 +1,25 @@
 {
   "name": "single-chat-room",
   "version": "0.1.0",
+  "private": true,
   "description": "A minimal single-room chat application based on Socket.io where users can use the Local and Facebook passport strategies to join",
   "main": "index.js",
   "scripts": {
+    "start": "nodemon ./bin/www",
     "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "cookie-parser": "~1.4.4",
+    "debug": "~2.6.9",
+    "ejs": "~2.6.1",
+    "express": "~4.16.1",
+    "express-session": "^1.17.3",
+    "http-errors": "~1.6.3",
+    "mongoose": "^6.9.1",
+    "morgan": "~1.9.1",
+    "nodemon": "^2.0.20",
+    "passport": "^0.6.0",
+    "passport-local": "^1.0.0"
   },
   "repository": {
     "type": "git",

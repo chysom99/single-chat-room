@@ -1,0 +1,10 @@
+<%- include("./partials/header.ejs")%>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+  </head>
+  <body>
+    <h1><%= title %></h1>
+    <p>Welcome to <%= title %></p>
+    <a href="/login">Login</a>
+    <br/>
+    <a href="/chat">Chat</a>
+    <%- include("./partials/footer.ejs", { jsFile: 'index' })%>

@@ -37,6 +37,15 @@ class Validator {
 		}),
 	});
 
+	// Others
+
+	static postMessageValidator = celebrate({
+		[Segments.BODY]: Joi.object().keys({
+			messageText: Joi.string().required(),
+			timeSent: Joi.date().required(),
+		}),
+	});
+
 	// Validators for book routes
 	static getBookValidator = celebrate({
 		[Segments.QUERY]: Joi.object().keys({

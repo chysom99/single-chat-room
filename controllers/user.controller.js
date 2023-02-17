@@ -72,7 +72,9 @@ class AuthController {
 	 * @access Private
 	 */
 	getMe = asyncHandler(async (req, res) => {
-		const user = await this.userLib.fetchUser(req.user.id);
+		const user = await this.userLib.fetchUser({
+			username: req.session.passport.user.username,
+		});
 
 		res.status(200).json({ success: true, data: user });
 	});

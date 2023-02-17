@@ -23,22 +23,57 @@ const server = http.createServer(app);
 const { Server } = require("socket.io");
 const io = new Server(server);
 
+/* export */ const onlines = new Map();
 //welcome a new user
 io.on("connection", (socket) => {
-  socket.emit("message", "Welcome to payment tool chat");
+	// Set sockets id so they can send back the id together with their username
+	socket.emit("status", { id: socket.id });
 
-  //broadcast when a user connect
-  socket.broadcast.emit("message", "User has joined the chat");
+	// Listening for the user to register id with their username
+	socket.on("register-id", (info) => {
+		onlineStatus = {
+			username: info.username,
+			online: true,
+		};
+		onlines.forEach((onlineInfo, id) => {
+			if (onlineInfo.username === info.username) {
+				onlines.delete(info.socketId);
+			}
+		});
+		onlines.set(info.socketId, onlineStatus);
+		// Lets others know that this user is now online
+		socket.broadcast.emit("online", onlineStatus);
+	});
 
-  //runs when a user leaves the chat
-  socket.on("disconnect", () => {
-    io.emit("message", "user hass left the chat");
-  });
+	// To Check for the users currently online at the start of their own application so they can
+	// adequately show those online.
+	socket.on("onlines", (callback) => {
+		const onlinesArr = [];
+		onlines.forEach((onlineInfo) => {
+			onlinesArr.push(onlineInfo);
+		});
+		return callback({
+			onlinesArr,
+		});
+	});
 
-  //listen to event
-  socket.on("chatMessage", (msg) => {
-    io.emit("message", msg);
-  });
+	//runs when a user leaves the chat
+	socket.on("disconnect", () => {
+		console.log("Disconnect", socket.id);
+		for (let [id, onlineInfo] of onlines) {
+			if (id === socket.id) {
+				onlineStatus = {
+					username: onlineInfo.username,
+					online: false,
+				};
+				// Informs others then they go offline so they can show appropriately
+				io.emit("online", onlineStatus);
+				onlines.delete(id);
+				continue;
+			}
+		}
+		// io.emit("message", "user hass left the chat");
+	});
 });
 
 /**
@@ -54,19 +89,19 @@ server.on("listening", onListening);
  */
 
 function normalizePort(val) {
-  const port = parseInt(val, 10);
+	const port = parseInt(val, 10);
 
-  if (isNaN(port)) {
-    // named pipe
-    return val;
-  }
+	if (isNaN(port)) {
+		// named pipe
+		return val;
+	}
 
-  if (port >= 0) {
-    // port number
-    return port;
-  }
+	if (port >= 0) {
+		// port number
+		return port;
+	}
 
-  return false;
+	return false;
 }
 
 /**
@@ -74,25 +109,25 @@ function normalizePort(val) {
  */
 
 function onError(error) {
-  if (error.syscall !== "listen") {
-    throw error;
-  }
+	if (error.syscall !== "listen") {
+		throw error;
+	}
 
-  const bind = typeof port === "string" ? "Pipe " + port : "Port " + port;
+	const bind = typeof port === "string" ? "Pipe " + port : "Port " + port;
 
-  // handle specific listen errors with friendly messages
-  switch (error.code) {
-    case "EACCES":
-      console.error(bind + " requires elevated privileges");
-      process.exit(1);
-      break;
-    case "EADDRINUSE":
-      console.error(bind + " is already in use");
-      process.exit(1);
-      break;
-    default:
-      throw error;
-  }
+	// handle specific listen errors with friendly messages
+	switch (error.code) {
+		case "EACCES":
+			console.error(bind + " requires elevated privileges");
+			process.exit(1);
+			break;
+		case "EADDRINUSE":
+			console.error(bind + " is already in use");
+			process.exit(1);
+			break;
+		default:
+			throw error;
+	}
 }
 
 /**
@@ -100,7 +135,7 @@ function onError(error) {
  */
 
 function onListening() {
-  const addr = server.address();
-  const bind = typeof addr === "string" ? "pipe " + addr : "port " + addr.port;
-  debug("Listening on " + bind);
+	const addr = server.address();
+	const bind = typeof addr === "string" ? "pipe " + addr : "port " + addr.port;
+	debug("Listening on " + bind);
 }

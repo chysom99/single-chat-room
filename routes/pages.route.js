@@ -21,8 +21,6 @@ router.get("/login", (req, res, next) => {
 
 /* GET chat page. */
 router.get("/chat", isLoggedPages, (req, res, next) => {
-	console.log(req.session);
-	console.log(req.isAuthenticated());
 	res.render("chat", { title: "Chat" });
 });
 

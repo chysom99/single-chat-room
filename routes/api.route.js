@@ -1,11 +1,15 @@
 const { Router } = require("express");
 const passport = require("../middlewares/passport.middleware");
 const { getMe, signup, getUsers } = require("../controllers/user.controller");
-const { sendMessage } = require("../controllers/message.controller");
+const {
+	sendMessage,
+	getMessages,
+} = require("../controllers/message.controller");
 const {
 	signupValidator,
 	loginValidator,
 	postMessageValidator,
+	getMessagesValidator,
 } = require("../utils/validator.util");
 const { isLoggedAPI } = require("../middlewares/isLogged.midlleware");
 
@@ -37,6 +41,7 @@ router.get("/users", isLoggedAPI, getUsers);
 
 // Messages
 router.post("/messages", isLoggedAPI, postMessageValidator, sendMessage);
+router.get("/messages", isLoggedAPI, getMessagesValidator, getMessages);
 
 router.all("*", (req, res) => {
 	res.status(404).json({

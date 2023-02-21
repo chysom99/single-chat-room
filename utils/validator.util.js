@@ -46,8 +46,7 @@ class Validator {
 		}),
 	});
 
-	// Validators for book routes
-	static getBookValidator = celebrate({
+	static getMessagesValidator = celebrate({
 		[Segments.QUERY]: Joi.object().keys({
 			page: Joi.number().positive().min(1).default(1),
 			limit: Joi.number().positive().min(1).default(25),
@@ -56,78 +55,6 @@ class Validator {
 			title: Joi.string(),
 			description: Joi.string(),
 			subject: Joi.string(),
-			authorInformation: Joi.string().custom((value, helper) => {
-				if (!isValidObjectId(value))
-					return helper.message("Please enter a valid author ID");
-				return value;
-			}, "ObjectID Validation"),
-			"dimension.height": Joi.number().positive(),
-			"dimension.width": Joi.number().positive(),
-			"dimension.unitOfMeasurement": Joi.string(),
-			"pricing.dailyRate": Joi.number().positive(),
-			"pricing.currency": Joi.string(),
-			"quantity.inStock": Joi.number().positive(),
-			"quantity.rentedOut": Joi.number().positive(),
-		}),
-	});
-
-	static postBookValidator = celebrate({
-		[Segments.BODY]: Joi.object().keys({
-			title: Joi.string().required(),
-			description: Joi.string().required(),
-			subject: Joi.string().required(),
-			authorInformation: Joi.string()
-				.required()
-				.custom((value, helper) => {
-					if (!isValidObjectId(value))
-						return helper.message("Please enter a valid author ID");
-					return value;
-				}, "ObjectID Validation"),
-			dimension: Joi.object({
-				height: Joi.number().positive().required(),
-				width: Joi.number().positive().required(),
-				unitOfMeasurement: Joi.string().required(),
-			}),
-			pricing: Joi.object({
-				dailyRate: Joi.number().positive().required(),
-				currency: Joi.string().required(),
-			}),
-			quantity: Joi.object({
-				inStock: Joi.number().positive(),
-				rentedOut: Joi.number().positive(),
-			}),
-		}),
-	});
-
-	static putBookValidator = celebrate({
-		[Segments.BODY]: Joi.object().keys({
-			title: Joi.string(),
-			description: Joi.string(),
-			subject: Joi.string(),
-			authorInformation: Joi.string().custom((value, helper) => {
-				if (!isValidObjectId(value))
-					return helper.message("Please enter a valid author ID");
-				return value;
-			}, "ObjectID Validation"),
-			dimension: Joi.object({
-				height: Joi.number().positive(),
-				width: Joi.number().positive(),
-				unitOfMeasurement: Joi.string(),
-			}),
-			pricing: Joi.object({
-				dailyRate: Joi.number().positive(),
-				currency: Joi.string(),
-			}),
-			quantity: Joi.object({
-				inStock: Joi.number().positive(),
-				rentedOut: Joi.number().positive(),
-			}),
-		}),
-	});
-
-	static putInStockBookValidator = celebrate({
-		[Segments.BODY]: Joi.object().keys({
-			inStock: Joi.number().positive(),
 		}),
 	});
 }

@@ -5,8 +5,8 @@
   "description": "A minimal single-room chat application based on Socket.io where users can use the Local and Facebook passport strategies to join",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon ./bin/www",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "nodemon ./bin/www",
+    "start": "node ./bin/www"
   },
   "dependencies": {
     "bcrypt": "^5.1.0",

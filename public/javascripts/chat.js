@@ -32,7 +32,7 @@ const outputLoading = async (parent) => {
 };
 
 //output message to DOM
-const outputMessage = (message) => {
+const outputMessage = (message, newMessage = false) => {
 	const div = document.createElement("div");
 	div.classList.add("message");
 	div.innerHTML = `
@@ -43,7 +43,11 @@ const outputMessage = (message) => {
 		</p>
 		<p class="text">${message.messageText}</p>
 	`;
-	document.querySelector(".chat-messages").prepend(div);
+	if (newMessage) {
+		document.querySelector(".chat-messages").appendChild(div);
+	} else {
+		document.querySelector(".chat-messages").prepend(div);
+	}
 };
 
 // output btn to show more messages
@@ -163,7 +167,7 @@ const getTimeOnly = (dateObj) => {
 })();
 
 socket.on("message", (message) => {
-	outputMessage(message);
+	outputMessage(message, true);
 
 	//scroll down
 	chatMessages.scrollTop = chatMessages.scrollHeight;
@@ -177,7 +181,7 @@ chatForm.addEventListener("submit", async (e) => {
 
 	const sent = await postMessage(msg);
 	if (sent.data.success) {
-		outputMessage(sent.data.message);
+		outputMessage(sent.data.message, true);
 		socket.emit("chatMessage", sent.data.message);
 	}
 	e.target.elements.msg.value = "";
